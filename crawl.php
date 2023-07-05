@@ -27,9 +27,9 @@ function crawlWebPage($sourceURL="https://en.wikipedia.org/wiki/Main_Page")
 function deleteResultsBasedOnTime()
 {
    global $conn;
-   sql = 'DELETE FROM search_links';
+   $sql = 'DELETE FROM search_links';
    $statement = $conn->prepare($sql);
-   $statement->execute($row); 
+   $statement->execute(); 
 }
 
 if(isset($_POST['crawl_button'])) {
@@ -38,7 +38,7 @@ if(isset($_POST['crawl_button'])) {
     deleteResultsBasedOnTime();
 
     // Crawl the home webpage
-    crawlWebPage('https://en.wikipedia.org/wiki/Main_Page'); // Replace with your home webpage URL
+    //crawlWebPage('https://en.wikipedia.org/wiki/Main_Page'); // Replace with your home webpage URL
 
     // Display the crawl results
     // displayCrawlResults()
