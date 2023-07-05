@@ -13,7 +13,7 @@ function crawlWebPage($sourceURL="https://en.wikipedia.org/wiki/Main_Page")
          $val = preg_replace("/.*<a\s+href=\"/sm","",$val);
          $val = preg_replace("/\".*/","",$val);
          $data[]['url'] = $val;
-         #print $val."<br/>";
+         print $val."<br/>";
 
 
          $sql = 'INSERT INTO search_links(url) VALUES(:url)';
@@ -24,6 +24,21 @@ function crawlWebPage($sourceURL="https://en.wikipedia.org/wiki/Main_Page")
        }
    }
 }
+
+function displayCrawlResults(){
+   global $conn;
+   $sql = 'SELECT * FROM search_links';
+   $statement = $conn->prepare($sql);
+   $statement->execute();
+   $result = $statement->fetchAll();
+   echo "<table>";
+   echo "<tr><th>URL</th></tr>";
+   foreach($result as $rs){
+      echo "<tr><td>".$rs[1]."</td></tr>";
+   }
+   echo "</table>";
+}
+
 function deleteResultsBasedOnTime()
 {
    global $conn;
@@ -33,13 +48,17 @@ function deleteResultsBasedOnTime()
 }
 
 if(isset($_POST['crawl_button'])) {
-   print_r($_POST);
     // Delete temporary stored results based on time
     deleteResultsBasedOnTime();
 
     // Crawl the home webpage
-    //crawlWebPage('https://en.wikipedia.org/wiki/Main_Page'); // Replace with your home webpage URL
+    crawlWebPage('https://en.wikipedia.org/wiki/Main_Page'); // Replace with your home webpage URL
 
-    // Display the crawl results
-    // displayCrawlResults()
+   echo "Crawl Successful";
+   echo "<a href='index.php'>Back</a>";
+}
+
+if(isset($_POST['display_button'])){
+   // Display the crawl results
+   displayCrawlResults();
 }
